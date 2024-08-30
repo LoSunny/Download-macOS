@@ -30,6 +30,9 @@ env:
   installer_version: "" # Do not touch: Populated by extract-details (suppresses warnings)
   installer_name: "" # Do not touch: Populated by extract-details (suppresses warnings)
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-12
@@ -60,6 +63,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
           hdiutil eject -force /Volumes/'Install macOS ${{ env.installer_name }}'
           sudo mv /tmp/'${{ env.installer_name }}'.dmg ~/Desktop/'${{ env.installer_name }}'.dmg
+          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.dmg' > ~/Desktop/'${{ env.installer_name }}.sha256'
 
       - if: github.event.inputs.file == 'iso'
         name: Generate macOS ISO Installer
@@ -74,6 +78,7 @@ jobs:
           hdiutil convert /tmp/'${{ env.installer_name }}'.dmg -format UDTO -o ~/Desktop/'${{ env.installer_name }}'
           mv -v ~/Desktop/'${{ env.installer_name }}'.cdr ~/Desktop/'${{ env.installer_name }}'.iso
           sudo rm -fv /tmp/'${{ env.installer_name }}'.dmg
+          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.iso' > ~/Desktop/'${{ env.installer_name }}.sha256'
 
       - if: github.event.inputs.file == 'zip'
         name: Generate macOS ZIP Installer
@@ -81,10 +86,19 @@ jobs:
           cd /Applications
           zip -r 'Install macOS ${{ env.installer_name }}.zip' 'Install macOS ${{ env.installer_name }}.app'
           mv -v 'Install macOS ${{ env.installer_name }}.zip' ~/Desktop/'${{ env.installer_name }}.zip'
+          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.zip' > ~/Desktop/'${{ env.installer_name }}.sha256'
 
       # Upload Installer
-      - name: Upload ${{ github.event.inputs.file }}
-        uses: actions/upload-artifact@v4
+      # - name: Upload ${{ github.event.inputs.file }}
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: macOS ${{ env.installer_name }}
+      #     path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: macOS ${{ env.installer_name }}
-          path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
+          name: "macOS ${{ env.installer_name }}"
+          files: |
+            "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
+            "~/Desktop/${{ env.installer_name }}.sha256"
