@@ -98,7 +98,8 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "macOS ${{ env.installer_name }}"
+          name: "macOS ${{ env.installer_name }} ${{ env.installer_version }}"
+          tag_name: "${{ env.installer_name }}-${{ env.installer_version }}"
           files: |
             "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
             "~/Desktop/${{ env.installer_name }}.sha256"
