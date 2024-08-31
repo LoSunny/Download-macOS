@@ -105,7 +105,7 @@ jobs:
         with:
           name: "${{ env.installer_name }} (${{ env.installer_version }}) [${{ github.event.inputs.file }}]"
           tag_name: "${{ env.installer_version }}-${{ github.event.inputs.file }}"
-          body: ""
+          body: "macOS ${{ env.installer_name }} (${{ env.installer_version }}) [${{ github.event.inputs.file }}]"
           files: |
-            ~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}
-            ~/Desktop/${{ env.installer_name }}.sha256
+            Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}
+            Desktop/${{ env.installer_name }}.sha256
