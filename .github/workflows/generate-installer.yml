@@ -97,7 +97,7 @@ jobs:
       - name: Upload ${{ github.event.inputs.file }}
         uses: actions/upload-artifact@v4
         with:
-          name: macOS ${{ env.installer_name }}
+          name: macOS ${{ env.installer_name }}.${{ github.event.inputs.file }}
           path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
           compression-level: '9'
 
