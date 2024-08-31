@@ -94,18 +94,17 @@ jobs:
           cat ~/Desktop/'${{ env.installer_name }}.sha256'
 
       # Upload Installer
-      # - name: Upload ${{ github.event.inputs.file }}
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: macOS ${{ env.installer_name }}
-      #     path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
-
-      - name: Release
-        uses: softprops/action-gh-release@v2
+      - name: Upload ${{ github.event.inputs.file }}
+        uses: actions/upload-artifact@v4
         with:
-          name: "${{ env.installer_name }} (${{ env.installer_version }}) [${{ github.event.inputs.file }}]"
-          tag_name: "${{ env.installer_version }}-${{ github.event.inputs.file }}"
-          body: "macOS ${{ env.installer_name }} (${{ env.installer_version }}) [${{ github.event.inputs.file }}]"
-          files: |
-            /Users/runner/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}
-            /Users/runner/Desktop/${{ env.installer_name }}.sha256
+          name: macOS ${{ env.installer_name }}
+          path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
+          compression-level: '0'
+
+      - name: Upload ${{ github.event.inputs.file }} Hash
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.installer_name }}.sha256
+          path: "~/Desktop/${{ env.installer_name }}.sha256"
+          compression-level: '9'
+
