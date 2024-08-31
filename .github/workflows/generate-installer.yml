@@ -99,7 +99,7 @@ jobs:
         with:
           name: macOS ${{ env.installer_name }}
           path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
-          compression-level: '0'
+          compression-level: '09
 
       - name: Upload ${{ github.event.inputs.file }} Hash
         uses: actions/upload-artifact@v4
