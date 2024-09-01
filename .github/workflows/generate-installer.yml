@@ -51,18 +51,8 @@ jobs:
           softwareupdate --fetch-full-installer --full-installer-version ${{ env.installer_version }}
 
       # Generate Installer
-      - name: Generate macOS Setup Files 5G
-        run: |
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 5120m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
       - name: Generate macOS Setup Files 5.5G
-        if: ${{ failure() }}
         run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 5632m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
@@ -78,7 +68,79 @@ jobs:
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
+      - name: Generate macOS Setup Files 6.5G
+        if: ${{ failure() }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 6656m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Setup Files 7G
+        if: ${{ failure() }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 7168m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Setup Files 7.5G
+        if: ${{ failure() }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 7680m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Setup Files 8G
+        if: ${{ failure() }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 8192m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Setup Files 8.5G
+        if: ${{ failure() }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 8704m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Setup Files 9G
+        if: ${{ failure() }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 9216m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+
+      - name: Generate macOS Setup Files 9.5G
+        if: ${{ failure() }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 9728m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
       - name: Generate macOS Installer
+        if: ${{ failure() }}
         run: |
           sleep 100
           hdiutil eject -force /Volumes/'Install macOS ${{ env.installer_name }}'
@@ -97,6 +159,7 @@ jobs:
 
       # Extract hash
       - name: Extract Version Details
+        if: ${{ failure() }}
         run: |
           echo "iso_hash=$(cat ~/Desktop/'${{ env.installer_name }}.iso.sha256' | cut -d ' ' -f1)" >> $GITHUB_ENV
           echo "dmg_hash=$(cat ~/Desktop/'${{ env.installer_name }}.iso.sha256' | cut -d ' ' -f1)" >> $GITHUB_ENV
@@ -104,6 +167,7 @@ jobs:
 
       # Upload Installer
       - name: Upload DMG
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
           name: macOS ${{ env.installer_name }}.dmg
@@ -111,6 +175,7 @@ jobs:
           compression-level: '9'
 
       - name: Upload ISO
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
           name: macOS ${{ env.installer_name }}.iso
@@ -118,6 +183,7 @@ jobs:
           compression-level: '9'
 
       - name: Upload ZIP
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
           name: macOS ${{ env.installer_name }}.zip
@@ -126,6 +192,7 @@ jobs:
 
       # Upload Hash
       - name: Upload DMG Hash
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
           name: "${{ env.installer_name }} ${{ env.iso_hash }}.dmg.sha256"
@@ -133,6 +200,7 @@ jobs:
           compression-level: '9'
 
       - name: Upload ISO Hash
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
           name: "${{ env.installer_name }} ${{ env.iso_hash }}.iso.sha256"
@@ -140,6 +208,7 @@ jobs:
           compression-level: '9'
 
       - name: Upload ZIP Hash
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
           name: "${{ env.installer_name }} ${{ env.iso_hash }}.zip.sha256"
