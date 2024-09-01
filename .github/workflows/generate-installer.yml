@@ -140,7 +140,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Installer
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         run: |
           sleep 100
           hdiutil eject -force /Volumes/'Install macOS ${{ env.installer_name }}'
@@ -159,7 +159,7 @@ jobs:
 
       # Extract hash
       - name: Extract Version Details
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         run: |
           echo "iso_hash=$(cat ~/Desktop/'${{ env.installer_name }}.iso.sha256' | cut -d ' ' -f1)" >> $GITHUB_ENV
           echo "dmg_hash=$(cat ~/Desktop/'${{ env.installer_name }}.iso.sha256' | cut -d ' ' -f1)" >> $GITHUB_ENV
@@ -167,7 +167,7 @@ jobs:
 
       # Upload Installer
       - name: Upload DMG
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: macOS ${{ env.installer_name }}.dmg
@@ -175,7 +175,7 @@ jobs:
           compression-level: '9'
 
       - name: Upload ISO
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: macOS ${{ env.installer_name }}.iso
@@ -183,7 +183,7 @@ jobs:
           compression-level: '9'
 
       - name: Upload ZIP
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: macOS ${{ env.installer_name }}.zip
@@ -192,7 +192,7 @@ jobs:
 
       # Upload Hash
       - name: Upload DMG Hash
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: "${{ env.installer_name }} ${{ env.iso_hash }}.dmg.sha256"
@@ -200,7 +200,7 @@ jobs:
           compression-level: '9'
 
       - name: Upload ISO Hash
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: "${{ env.installer_name }} ${{ env.iso_hash }}.iso.sha256"
@@ -208,7 +208,7 @@ jobs:
           compression-level: '9'
 
       - name: Upload ZIP Hash
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: "${{ env.installer_name }} ${{ env.iso_hash }}.zip.sha256"
