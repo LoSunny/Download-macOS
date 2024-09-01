@@ -15,23 +15,20 @@ on:
           - Catalina v10.15.7
           - Mojave v10.14.6
           - High Sierra v10.13.6
-      file:
-        type: choice
-        description: "File Type"
-        required: true
-        options:
-          - iso
-          - dmg
-          - zip
+      # file:
+      #   type: choice
+      #   description: "File Type"
+      #   required: true
+      #   options:
+      #     - iso
+      #     - dmg
+      #     - zip
 
 run-name: Generate macOS Installer - ${{ github.event.inputs.macos_version }} ${{ github.event.inputs.file }}
 
 env:
   installer_version: "" # Do not touch: Populated by extract-details (suppresses warnings)
   installer_name: "" # Do not touch: Populated by extract-details (suppresses warnings)
-
-permissions:
-  contents: write
 
 jobs:
   build:
@@ -54,57 +51,74 @@ jobs:
           softwareupdate --fetch-full-installer --full-installer-version ${{ env.installer_version }}
 
       # Generate Installer
-      - if: github.event.inputs.file == 'dmg'
-        name: Generate macOS DMG Installer
-        run: |
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 16384m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 10
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-          hdiutil eject -force /Volumes/'Install macOS ${{ env.installer_name }}'
-          sudo mv /tmp/'${{ env.installer_name }}'.dmg ~/Desktop/'${{ env.installer_name }}'.dmg
-          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.dmg' > ~/Desktop/'${{ env.installer_name }}.sha256'
-
-      - if: github.event.inputs.file == 'iso'
-        name: Generate macOS ISO Installer
+      - name: Generate macOS Installer
         run: |
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 16384m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-          echo "Sleeping 100 to allow the installer to finish"
           sleep 100
           hdiutil eject -force /Volumes/'Install macOS ${{ env.installer_name }}'
+          
           hdiutil convert /tmp/'${{ env.installer_name }}'.dmg -format UDTO -o ~/Desktop/'${{ env.installer_name }}'
           mv -v ~/Desktop/'${{ env.installer_name }}'.cdr ~/Desktop/'${{ env.installer_name }}'.iso
-          sudo rm -fv /tmp/'${{ env.installer_name }}'.dmg
-          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.iso' > ~/Desktop/'${{ env.installer_name }}.sha256'
+          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.iso' > ~/Desktop/'${{ env.installer_name }}.iso.sha256'
+          
+          sudo mv /tmp/'${{ env.installer_name }}'.dmg ~/Desktop/'${{ env.installer_name }}'.dmg
+          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.dmg' > ~/Desktop/'${{ env.installer_name }}.dmg.sha256'
 
-      - if: github.event.inputs.file == 'zip'
-        name: Generate macOS ZIP Installer
-        run: |
           cd /Applications
           zip -r 'Install macOS ${{ env.installer_name }}.zip' 'Install macOS ${{ env.installer_name }}.app'
           mv -v 'Install macOS ${{ env.installer_name }}.zip' ~/Desktop/'${{ env.installer_name }}.zip'
-          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.zip' > ~/Desktop/'${{ env.installer_name }}.sha256'
+          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.zip' > ~/Desktop/'${{ env.installer_name }}.zip.sha256'
 
-      - name: Generate SHA256 Hash
+      # Extract hash
+      - name: Extract Version Details
         run: |
-          shasum -a 256 ~/Desktop/'${{ env.installer_name }}.${{ github.event.inputs.file }}' > ~/Desktop/'${{ env.installer_name }}.sha256'
-          cat ~/Desktop/'${{ env.installer_name }}.sha256'
+          echo "iso_hash=$(cat ~/Desktop/'${{ env.installer_name }}.iso.sha256')" >> $GITHUB_ENV
+          echo "dmg_hash=$(cat ~/Desktop/'${{ env.installer_name }}.iso.sha256')" >> $GITHUB_ENV
+          echo "zip_hash=$(cat ~/Desktop/'${{ env.installer_name }}.zip.sha256')" >> $GITHUB_ENV
 
       # Upload Installer
-      - name: Upload ${{ github.event.inputs.file }}
+      - name: Upload DMG
         uses: actions/upload-artifact@v4
         with:
-          name: macOS ${{ env.installer_name }}.${{ github.event.inputs.file }}
-          path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
+          name: macOS ${{ env.installer_name }}.dmg
+          path: "~/Desktop/${{ env.installer_name }}.dmg"
           compression-level: '9'
 
-      - name: Upload ${{ github.event.inputs.file }} Hash
+      - name: Upload ISO
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.installer_name }}.sha256
-          path: "~/Desktop/${{ env.installer_name }}.sha256"
+          name: macOS ${{ env.installer_name }}.iso
+          path: "~/Desktop/${{ env.installer_name }}.iso"
           compression-level: '9'
 
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: macOS ${{ env.installer_name }}.zip
+          path: "~/Desktop/${{ env.installer_name }}.zip"
+          compression-level: '9'
+
+      # Upload Hash
+      - name: Upload DMG Hash
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ env.installer_name }} ${{ env.iso_hash }}.dmg.sha256"
+          path: "~/Desktop/${{ env.installer_name }}.dmg.sha256"
+          compression-level: '9'
+
+      - name: Upload ISO Hash
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ env.installer_name }} ${{ env.iso_hash }}.iso.sha256"
+          path: "~/Desktop/${{ env.installer_name }}.iso.sha256"
+          compression-level: '9'
+
+      - name: Upload ZIP Hash
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ env.installer_name }} ${{ env.iso_hash }}.zip.sha256"
+          path: "~/Desktop/${{ env.installer_name }}.zip.sha256"
+          compression-level: '9'
