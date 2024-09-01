@@ -271,7 +271,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           echo "iso_hash=$(cat ~/Desktop/'${{ env.installer_name }}.iso.sha256' | cut -d ' ' -f1)" >> $GITHUB_ENV
-          echo "dmg_hash=$(cat ~/Desktop/'${{ env.installer_name }}.iso.sha256' | cut -d ' ' -f1)" >> $GITHUB_ENV
+          echo "dmg_hash=$(cat ~/Desktop/'${{ env.installer_name }}.dmg.sha256' | cut -d ' ' -f1)" >> $GITHUB_ENV
           echo "zip_hash=$(cat ~/Desktop/'${{ env.installer_name }}.zip.sha256' | cut -d ' ' -f1)" >> $GITHUB_ENV
 
       # Upload Installer
