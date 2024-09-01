@@ -61,7 +61,7 @@ jobs:
       - name: Generate macOS Setup Files 5.5G
         if: ${{ failure() }}
         run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 5632m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
@@ -71,7 +71,7 @@ jobs:
       - name: Generate macOS Setup Files 6G
         if: ${{ failure() }}
         run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 6144m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
