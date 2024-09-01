@@ -273,7 +273,8 @@ jobs:
         run: |
           sleep 100
           hdiutil eject -force /Volumes/'Install macOS ${{ env.installer_name }}'
-          
+
+          sleep 100
           hdiutil convert /tmp/'${{ env.installer_name }}'.dmg -format UDTO -o ~/Desktop/'${{ env.installer_name }}'
           mv -v ~/Desktop/'${{ env.installer_name }}'.cdr ~/Desktop/'${{ env.installer_name }}'.iso
           shasum -a 256 ~/Desktop/'${{ env.installer_name }}.iso' > ~/Desktop/'${{ env.installer_name }}.iso.sha256'
