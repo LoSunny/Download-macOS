@@ -52,7 +52,7 @@ jobs:
 
       # Generate Installer
       - name: Generate macOS Setup Files 5.5G
-        id: setup-5.5
+        id: setup-55
         run: |
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 5632m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
@@ -61,7 +61,7 @@ jobs:
 
       - name: Generate macOS Setup Files 6G
         id: setup-6
-        if: ${{ failure() && steps.setup-5.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-55.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -71,7 +71,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 6.5G
-        id: setup-6.5
+        id: setup-65
         if: ${{ failure() && steps.setup-6.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -83,7 +83,7 @@ jobs:
 
       - name: Generate macOS Setup Files 7G
         id: setup-7
-        if: ${{ failure() && steps.setup-6.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-65.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -93,7 +93,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 7.5G
-        id: setup-7.5
+        id: setup-75
         if: ${{ failure() && steps.setup-7.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -105,7 +105,7 @@ jobs:
 
       - name: Generate macOS Setup Files 8G
         id: setup-8
-        if: ${{ failure() && steps.setup-7.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-75.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -115,7 +115,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 8.5G
-        id: setup-8.5
+        id: setup-85
         if: ${{ failure() && steps.setup-8.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -127,7 +127,7 @@ jobs:
 
       - name: Generate macOS Setup Files 9G
         id: setup-9
-        if: ${{ failure() && steps.setup-8.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-85.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -137,7 +137,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 9.5G
-        id: setup-9.5
+        id: setup-95
         if: ${{ failure() && steps.setup-9.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -149,7 +149,7 @@ jobs:
 
       - name: Generate macOS Setup Files 10G
         id: setup-10
-        if: ${{ failure() && steps.setup-9.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-95.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -159,7 +159,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 10.5G
-        id: setup-10.5
+        id: setup-105
         if: ${{ failure() && steps.setup-10.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -171,7 +171,7 @@ jobs:
 
       - name: Generate macOS Setup Files 11G
         id: setup-11
-        if: ${{ failure() && steps.setup-10.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-105.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -181,7 +181,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 11.5G
-        id: setup-11.5
+        id: setup-115
         if: ${{ failure() && steps.setup-11.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -193,7 +193,7 @@ jobs:
 
       - name: Generate macOS Setup Files 12G
         id: setup-12
-        if: ${{ failure() && steps.setup-11.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-115.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -203,7 +203,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 12.5G
-        id: setup-12.5
+        id: setup-125
         if: ${{ failure() && steps.setup-12.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -215,7 +215,7 @@ jobs:
 
       - name: Generate macOS Setup Files 13G
         id: setup-13
-        if: ${{ failure() && steps.setup-12.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-125.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -225,7 +225,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 13.5G
-        id: setup-13.5
+        id: setup-135
         if: ${{ failure() && steps.setup-13.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -237,7 +237,7 @@ jobs:
 
       - name: Generate macOS Setup Files 14G
         id: setup-14
-        if: ${{ failure() && steps.setup-13.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-135.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -247,7 +247,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 14.5G
-        id: setup-14.5
+        id: setup-145
         if: ${{ failure() && steps.setup-14.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
@@ -259,7 +259,7 @@ jobs:
 
       - name: Generate macOS Setup Files 15G
         id: setup-15
-        if: ${{ failure() && steps.setup-14.5.conclusion == 'failure' }}
+        if: ${{ failure() && steps.setup-145.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
