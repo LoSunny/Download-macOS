@@ -51,18 +51,33 @@ jobs:
           softwareupdate --fetch-full-installer --full-installer-version ${{ env.installer_version }}
 
       # Generate Installer
-      - name: Generate macOS Installer
+      - name: Generate macOS Setup Files 5G
         run: |
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 4096m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          echo "test1"
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 5120m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
-          echo "test2"
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-          echo "test3"
+
+      - name: Generate macOS Setup Files 5.5G
+        if: ${{ failure() }}
+        run: |
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 5632m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Setup Files 6G
+        if: ${{ failure() }}
+        run: |
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 6144m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Installer
+        run: |
           sleep 100
           hdiutil eject -force /Volumes/'Install macOS ${{ env.installer_name }}'
-          echo "test4"
           
           hdiutil convert /tmp/'${{ env.installer_name }}'.dmg -format UDTO -o ~/Desktop/'${{ env.installer_name }}'
           mv -v ~/Desktop/'${{ env.installer_name }}'.cdr ~/Desktop/'${{ env.installer_name }}'.iso
