@@ -77,83 +77,9 @@ jobs:
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
-      - name: Generate macOS Setup Files 8.5G
-        if: "!contains(github.event.inputs.macos_version, 'High Sierra v10.13.6') && !contains(github.event.inputs.macos_version, 'Mojave v10.14.6') && !contains(github.event.inputs.macos_version, 'Catalina v10.15.7')"
-        run: |
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 8704m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
-      - name: Generate macOS Setup Files 9G
-        id: setup-9
-        if: ${{ failure() && steps.setup-85.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 9216m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
-      - name: Generate macOS Setup Files 9.5G
-        id: setup-95
-        if: ${{ failure() && steps.setup-9.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 9728m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
-      - name: Generate macOS Setup Files 10G
-        id: setup-10
-        if: ${{ failure() && steps.setup-95.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 10240m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
-      - name: Generate macOS Setup Files 10.5G
-        id: setup-105
-        if: ${{ failure() && steps.setup-10.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 10752m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
-      - name: Generate macOS Setup Files 11G
-        id: setup-11
-        if: ${{ failure() && steps.setup-105.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 11264m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
-      - name: Generate macOS Setup Files 11.5G
-        id: setup-115
-        if: ${{ failure() && steps.setup-11.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 11776m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
       - name: Generate macOS Setup Files 12G
         id: setup-12
-        if: ${{ failure() && steps.setup-115.conclusion == 'failure' }}
+        if: "!contains(github.event.inputs.macos_version, 'High Sierra v10.13.6') && !contains(github.event.inputs.macos_version, 'Mojave v10.14.6') && !contains(github.event.inputs.macos_version, 'Catalina v10.15.7')"
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
