@@ -52,27 +52,15 @@ jobs:
 
       # Generate Installer
       - name: Generate macOS Setup Files 5.5G
-        id: setup-55
+        if: github.event.inputs.macos_version == 'High Sierra v10.13.6'
         run: |
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 5632m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
-      - name: Generate macOS Setup Files 6G
-        id: setup-6
-        if: ${{ failure() && steps.setup-55.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 6144m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
       - name: Generate macOS Setup Files 6.5G
-        id: setup-65
-        if: ${{ failure() && steps.setup-6.conclusion == 'failure' }}
+        if: github.event.inputs.macos_version == 'Mojave v10.14.6'
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
@@ -81,42 +69,15 @@ jobs:
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
-      - name: Generate macOS Setup Files 7G
-        id: setup-7
-        if: ${{ failure() && steps.setup-65.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 7168m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
-      - name: Generate macOS Setup Files 7.5G
-        id: setup-75
-        if: ${{ failure() && steps.setup-7.conclusion == 'failure' }}
-        run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 7680m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
       - name: Generate macOS Setup Files 8G
-        id: setup-8
-        if: ${{ failure() && steps.setup-75.conclusion == 'failure' }}
+        if: github.event.inputs.macos_version == 'Catalina v10.15.7'
         run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 8192m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 8.5G
-        id: setup-85
-        if: ${{ failure() && steps.setup-8.conclusion == 'failure' }}
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
