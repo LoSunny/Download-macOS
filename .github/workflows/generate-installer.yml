@@ -86,8 +86,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 13.5G
-        id: setup-135
-        if: github.event.inputs.macos_version == 'Ventura v13.6.9'
+        if: github.event.inputs.macos_version == 'Ventura v13.6.9' || github.event.inputs.macos_version == 'Monterey v12.7.6'
         run: |
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 14336m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
@@ -95,31 +94,19 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 14G
-        id: setup-14
-        if: github.event.inputs.macos_version == 'Monterey v12.7.6' || github.event.inputs.macos_version == 'Ventura v13.6.9'  || github.event.inputs.macos_version == 'Sonoma v14.6.1'
-        run: |
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 14336m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
-          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
-          sleep 20
-          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
-
-      - name: Generate macOS Setup Files 14.5G
-        id: setup-145
-        if: ${{ failure() && steps.setup-14.conclusion == 'failure' }}
+        if: github.event.inputs.macos_version == 'Monterey v12.7.6'
         run: |
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
-          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 14848m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 14336m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 15G
         id: setup-15
-        if: ${{ failure() && steps.setup-145.conclusion == 'failure' }}
+        if: github.event.inputs.macos_version == 'Sonoma v14.6.1'
         run: |
-          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
-          sleep 10
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 15360m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
