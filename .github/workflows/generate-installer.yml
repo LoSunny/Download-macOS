@@ -96,7 +96,7 @@ jobs:
 
       - name: Generate macOS Setup Files 14G
         id: setup-14
-        if: github.event.inputs.macos_version == 'Monterey v12.7.6' || github.event.inputs.macos_version == 'Ventura v13.6.9'
+        if: github.event.inputs.macos_version == 'Monterey v12.7.6' || github.event.inputs.macos_version == 'Ventura v13.6.9'  || github.event.inputs.macos_version == 'Sonoma v14.6.1'
         run: |
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 14336m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
@@ -121,6 +121,28 @@ jobs:
           sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
           sleep 10
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 15360m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Setup Files 15.5G
+        id: setup-155
+        if: ${{ failure() && steps.setup-15.conclusion == 'failure' }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 15872m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
+          sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
+          sleep 20
+          sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
+
+      - name: Generate macOS Setup Files 16G
+        id: setup-16
+        if: ${{ failure() && steps.setup-155.conclusion == 'failure' }}
+        run: |
+          sudo rm -f /tmp/'${{ env.installer_name }}'.dmg
+          sleep 10
+          sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 16384m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
           sleep 20
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
