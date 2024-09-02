@@ -78,7 +78,7 @@ jobs:
           sudo /Applications/'Install macOS ${{ env.installer_name }}'.app/Contents/Resources/createinstallmedia --volume /Volumes/'${{ env.installer_name }}' --nointeraction
 
       - name: Generate macOS Setup Files 13G
-        if: github.event.inputs.macos_version == 'Big Sur v11.7.10' || github.event.inputs.macos_version == 'Monterey v12.7.6'
+        if: github.event.inputs.macos_version == 'Big Sur v11.7.10'
         run: |
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 13312m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
@@ -87,7 +87,7 @@ jobs:
 
       - name: Generate macOS Setup Files 13.5G
         id: setup-135
-        if: "!contains(github.event.inputs.macos_version, 'High Sierra v10.13.6') && !contains(github.event.inputs.macos_version, 'Mojave v10.14.6') && !contains(github.event.inputs.macos_version, 'Catalina v10.15.7') && !contains(github.event.inputs.macos_version, 'Big Sur v11.7.10')"
+        if: github.event.inputs.macos_version == 'Monterey v12.7.6'
         run: |
           sudo hdiutil create -o /tmp/'${{ env.installer_name }}' -size 13824m -volname '${{ env.installer_name }}' -layout SPUD -fs HFS+J
           sudo hdiutil attach /tmp/'${{ env.installer_name }}'.dmg -noverify -mountpoint /Volumes/'${{ env.installer_name }}'
